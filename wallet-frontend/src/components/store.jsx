@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { ethers } from "ethers";
 import CONTRACT_ABI from "../Contracts/ABI.json";
 import CONTRACT_BYTECODE from "../Contracts/ByteCode.json";
-sign;
+
 const useStore = create((set) => ({
   // Wallet Connection State
   provider: null,
@@ -16,6 +16,7 @@ const useStore = create((set) => ({
   owners: [],
   requiredConfirmations: 0,
   transactionCount: 0,
+  contractBalance: "0.0",
 
   // Functions to update state
   connectWallet: async () => {
@@ -64,7 +65,6 @@ const useStore = create((set) => ({
     console.log("Wallet connection cleared.");
   },
 
-  // Functions to interact with the contract (these will be called from components)
   // Deploy a new MultiSig Wallet
   deployNewWallet: async (ownerAddresses, requiredConfs) => {
     const { signer } = useStore.getState();
@@ -90,10 +90,10 @@ const useStore = create((set) => ({
       const deployedAddress = await contract.getAddress();
       set({ multiSigContract: contract, contractAddress: deployedAddress });
       console.log("MultiSig Wallet deployed at:", deployedAddress);
-      return deployedAddress; // Return the deployed address for navigation
+      return deployedAddress;
     } catch (error) {
       console.error("Error deploying new wallet:", error);
-      throw error; // Propagate error for UI handling
+      throw error;
     }
   },
 
@@ -136,16 +136,21 @@ const useStore = create((set) => ({
 
   // Fetch contract details
   fetchContractDetails: async () => {
-    const { multiSigContract } = useStore.getState();
+    const { multiSigContract, provider, contractBalance } = useStore.getState();
     if (multiSigContract) {
       try {
         const owners = await multiSigContract.getOwners();
         const requiredConfirmations = await multiSigContract.getRequired();
         const transactionCount = await multiSigContract.getTransactionCount();
+
+        const balanceWei = await provider.getBalance(multiSigContract.target);
+        const contractBalance = ethers.formatEther(balanceWei);
+
         set({
           owners,
           requiredConfirmations: Number(requiredConfirmations),
           transactionCount: Number(transactionCount),
+          contractBalance,
         });
         console.log("Contract details fetched:", {
           owners,
@@ -172,7 +177,7 @@ const useStore = create((set) => ({
         .submitTransaction(destination, value, data || "0x");
       await tx.wait();
       console.log("Transaction submitted:", tx);
-      await useStore.getState().fetchContractDetails(); // Refresh transaction count
+      await useStore.getState().fetchContractDetails();
       return tx;
     } catch (error) {
       console.error("Error submitting new transaction:", error);
@@ -180,7 +185,6 @@ const useStore = create((set) => ({
     }
   },
 
-  // Get a list of transactions
   getTransactions: async () => {
     const { multiSigContract } = useStore.getState();
     if (!multiSigContract) {
@@ -202,7 +206,7 @@ const useStore = create((set) => ({
           isConfirmedByCurrentUser: await multiSigContract.confirmations(
             i,
             useStore.getState().account
-          ), // Check if current user confirmed
+          ),
         });
       }
       console.log("Fetched transactions:", transactions);
@@ -228,8 +232,14 @@ const useStore = create((set) => ({
       console.log("Transaction confirmed:", transactionId);
       return tx;
     } catch (error) {
-      console.error("Error confirming transaction:", error);
-      throw error;
+      if (error.info.error.code == 4001) {
+        throw new Error("User denied transaction signature");
+      }
+      console.error(
+        "Error confirming transaction Contract Has No Enough Balance:",
+        error
+      );
+      throw new Error("Contract Has No Enough Balance");
     }
   },
 
