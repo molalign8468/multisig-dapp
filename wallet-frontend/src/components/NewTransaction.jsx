@@ -48,7 +48,7 @@ const NewTransaction = () => {
 
     try {
       await submitNewTransaction(destinationAddress, amountEth, data);
-      setMessage("Transaction created successfully!");
+      setMessage("✅ Transaction created successfully!");
       setNameOfTx("");
       setDestinationAddress("");
       setAmountEth("");
@@ -63,26 +63,38 @@ const NewTransaction = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex flex-col items-center justify-center p-4 text-white font-inter relative overflow-hidden">
-      <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 flex items-center justify-center p-6 relative overflow-hidden">
+      <svg
+        className="absolute top-10 left-10 w-48 h-48 opacity-20 text-purple-600 animate-pulse"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path d="M12 0L24 22H0L12 0Z" />
+      </svg>
+      <svg
+        className="absolute bottom-10 right-10 w-56 h-56 opacity-20 text-pink-600 animate-bounce-slow"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <circle cx="12" cy="12" r="10" />
+      </svg>
 
-      <div className="relative z-10 bg-gray-800 bg-opacity-70 backdrop-filter backdrop-blur-lg border border-gray-700 p-8 rounded-xl shadow-2xl w-full max-w-lg transform transition-all duration-500 hover:scale-[1.01] animate-fade-in">
-        <h1 className="text-3xl md:text-4xl font-extrabold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 drop-shadow-lg leading-tight">
-          Create New Transaction
+      <div className="relative z-10 w-full max-w-xl bg-white/10 backdrop-blur-lg border border-gray-700 shadow-2xl rounded-2xl p-8 animate-fade-in">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-center bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent mb-3">
+          🚀 Create Transaction
         </h1>
-        <p className="text-base md:text-lg text-gray-300 mb-8 text-center leading-relaxed">
-          Initiate a new multi-signature transaction. Fill in the details below
-          to propose a new transaction for owner confirmations.
+        <p className="text-gray-300 text-center mb-8">
+          Propose a new <span className="text-purple-400">Multi-Signature</span>{" "}
+          transaction for owner approvals.
         </p>
 
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div>
             <label
               htmlFor="nameOfTx"
-              className="block text-gray-300 text-sm font-bold mb-2 text-left"
+              className="block text-sm font-semibold text-gray-300 mb-1"
             >
-              Name of Transaction: (For UI purposes, not on chain)
+              Transaction Name
             </label>
             <input
               type="text"
@@ -90,31 +102,33 @@ const NewTransaction = () => {
               value={nameOfTx}
               onChange={(e) => setNameOfTx(e.target.value)}
               placeholder="e.g., Pay Rent"
-              className="shadow-inner appearance-none border border-gray-600 rounded-lg w-full py-3 px-4 text-gray-200 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-gray-700 placeholder-gray-400 transition duration-300"
+              className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-gray-200 placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
             />
           </div>
+
           <div>
             <label
               htmlFor="destinationAddress"
-              className="block text-gray-300 text-sm font-bold mb-2 text-left"
+              className="block text-sm font-semibold text-gray-300 mb-1"
             >
-              Destination Address:
+              Destination Address
             </label>
             <input
               type="text"
               id="destinationAddress"
               value={destinationAddress}
               onChange={(e) => setDestinationAddress(e.target.value)}
-              placeholder="e.g., 0xRecipientAddress..."
-              className="shadow-inner appearance-none border border-gray-600 rounded-lg w-full py-3 px-4 text-gray-200 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-gray-700 placeholder-gray-400 transition duration-300"
+              placeholder="0xRecipient..."
+              className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-gray-200 placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
             />
           </div>
+
           <div>
             <label
               htmlFor="amountEth"
-              className="block text-gray-300 text-sm font-bold mb-2 text-left"
+              className="block text-sm font-semibold text-gray-300 mb-1"
             >
-              Amount in ETH:
+              Amount (ETH)
             </label>
             <input
               type="text"
@@ -122,23 +136,24 @@ const NewTransaction = () => {
               value={amountEth}
               onChange={(e) => setAmountEth(e.target.value)}
               placeholder="e.g., 0.5"
-              className="shadow-inner appearance-none border border-gray-600 rounded-lg w-full py-3 px-4 text-gray-200 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-gray-700 placeholder-gray-400 transition duration-300"
+              className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-gray-200 placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
             />
           </div>
+
           <div>
             <label
               htmlFor="data"
-              className="block text-gray-300 text-sm font-bold mb-2 text-left"
+              className="block text-sm font-semibold text-gray-300 mb-1"
             >
-              Data (optional, hex string):
+              Data (optional, hex string)
             </label>
             <input
               type="text"
               id="data"
               value={data}
               onChange={(e) => setData(e.target.value)}
-              placeholder="e.g., 0x..."
-              className="shadow-inner appearance-none border border-gray-600 rounded-lg w-full py-3 px-4 text-gray-200 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-gray-700 placeholder-gray-400 transition duration-300"
+              placeholder="0x..."
+              className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-gray-200 placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
             />
           </div>
         </div>
@@ -146,58 +161,29 @@ const NewTransaction = () => {
         <button
           onClick={handleCreateTx}
           disabled={loading}
-          className={`w-full mt-6 py-3 px-4 rounded-lg font-bold text-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-70 shadow-lg tracking-wide uppercase ${
+          className={`mt-7 w-full py-3 px-4 rounded-lg font-bold text-lg tracking-wide transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-500 shadow-xl ${
             loading
-              ? "bg-gray-600 cursor-not-allowed text-gray-400"
-              : "bg-gradient-to-r from-purple-600 to-pink-700 hover:from-purple-700 hover:to-pink-800 text-white"
+              ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+              : "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
           }`}
         >
-          {loading ? "Creating Transaction..." : "Create Transaction"}
+          {loading ? "⏳ Creating..." : "✅ Create Transaction"}
         </button>
 
         {message && (
           <p
-            className={`mt-4 text-center text-sm md:text-base p-2 rounded-md ${
+            className={`mt-5 text-center font-medium p-3 rounded-lg ${
               message.startsWith("Error")
-                ? "bg-red-900 text-red-300"
-                : "bg-green-900 text-green-300"
+                ? "bg-red-900/70 text-red-300"
+                : "bg-green-900/70 text-green-300"
             }`}
           >
             {message}
           </p>
         )}
       </div>
+
       <style jsx>{`
-        @keyframes blob {
-          0% {
-            transform: translate(0, 0) scale(1);
-          }
-          33% {
-            transform: translate(30px, -50px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
-          100% {
-            transform: translate(0, 0) scale(1);
-          }
-        }
-
-        @keyframes blob-alt {
-          0% {
-            transform: translate(0, 0) scale(1);
-          }
-          33% {
-            transform: translate(-40px, 60px) scale(1.2);
-          }
-          66% {
-            transform: translate(30px, -30px) scale(0.8);
-          }
-          100% {
-            transform: translate(0, 0) scale(1);
-          }
-        }
-
         @keyframes fadeIn {
           from {
             opacity: 0;
@@ -208,21 +194,11 @@ const NewTransaction = () => {
             transform: translateY(0);
           }
         }
-
-        .animate-blob {
-          animation: blob 7s infinite cubic-bezier(0.42, 0, 0.58, 1);
-        }
-
-        .animate-blob-alt {
-          animation: blob-alt 8s infinite cubic-bezier(0.42, 0, 0.58, 1);
-        }
-
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-
         .animate-fade-in {
-          animation: fadeIn 0.8s ease-out forwards;
+          animation: fadeIn 0.9s ease-out forwards;
+        }
+        .animate-bounce-slow {
+          animation: bounce 6s infinite;
         }
       `}</style>
     </div>

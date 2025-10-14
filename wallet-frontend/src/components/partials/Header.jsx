@@ -13,10 +13,12 @@ const Header = () => {
 
   const getLinkClasses = (path) => {
     const baseClasses =
-      "flex items-center space-x-2 text-lg hover:text-purple-400 transition duration-300 px-3 py-2 rounded-md";
+      "flex items-center space-x-2 text-base font-medium px-4 py-2 rounded-xl transition-all duration-300";
     const isActive = window.location.pathname === path;
     return `${baseClasses} ${
-      isActive ? "font-bold text-purple-400 bg-gray-800" : ""
+      isActive
+        ? "text-white bg-gradient-to-r from-purple-500 to-pink-500 shadow-md"
+        : "text-gray-300 hover:text-white hover:bg-gray-800"
     }`;
   };
 
@@ -112,16 +114,18 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-gray-900 text-white shadow-lg p-4 sticky top-0 z-50">
-      <div className="container mx-auto flex justify-between items-center">
+    <header className="bg-gray-900/95 backdrop-blur-md text-white shadow-lg sticky top-0 z-50">
+      <div className="container mx-auto flex justify-between items-center px-4 py-3">
+        {/* Brand */}
         <Link
           to="/"
-          className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500"
+          className="text-2xl font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 hover:scale-105 transition-transform"
         >
           MultiSig DApp
         </Link>
 
-        <nav className="hidden md:flex space-x-2">
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex space-x-3">
           {navItems.map((item) => {
             const shouldRender =
               (!item.requiresConnection || isConnected) &&
@@ -142,10 +146,11 @@ const Header = () => {
           })}
         </nav>
 
+        {/* Mobile Menu Button */}
         <div className="md:hidden">
           <button
             onClick={toggleMenu}
-            className="text-white focus:outline-none"
+            className="text-gray-300 hover:text-white focus:outline-none"
           >
             <svg
               className="w-8 h-8"
@@ -174,8 +179,9 @@ const Header = () => {
         </div>
       </div>
 
+      {/* Mobile Nav */}
       {isOpen && (
-        <nav className="md:hidden bg-gray-800 mt-4 py-2 rounded-lg shadow-xl">
+        <nav className="md:hidden bg-gray-800/95 backdrop-blur-lg mt-2 mx-3 rounded-xl shadow-lg animate-fade-in">
           {navItems.map((item) => {
             const shouldRender =
               (!item.requiresConnection || isConnected) &&
@@ -186,7 +192,7 @@ const Header = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className="block px-4 py-2 text-lg hover:bg-gray-700 transition duration-300 flex items-center space-x-2"
+                  className="flex items-center space-x-3 px-5 py-3 text-base text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-all duration-300"
                   onClick={toggleMenu}
                 >
                   {item.icon}

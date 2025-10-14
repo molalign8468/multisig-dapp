@@ -25,126 +25,103 @@ const ExistingWallet = () => {
       const success = await loadExistingWallet(contractAddress);
       if (success) {
         setMultiSigContract(contractAddress, signer);
-        setMessage(`Wallet loaded successfully from: ${contractAddress}`);
+        setMessage(`✅ Wallet loaded successfully!`);
         navigate("/dashboard");
       } else {
-        setMessage("Failed to load wallet. Please check the address.");
+        setMessage("❌ Failed to load wallet. Please check the address.");
       }
     } catch (error) {
       console.error("Loading existing wallet failed:", error);
-      setMessage(`Failed to load wallet: ${error.message}`);
+      setMessage(`⚠️ Failed: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex flex-col items-center justify-center p-4 text-white font-inter relative overflow-hidden">
-      <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob-alt"></div>
-      <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-teal-500 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-black to-slate-800 px-4 relative overflow-hidden">
+      <div className="absolute -top-20 -left-20 w-72 h-72 bg-purple-700 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+      <div className="absolute -bottom-20 -right-20 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse delay-1000"></div>
 
-      <div className="relative z-10 bg-gray-800 bg-opacity-70 backdrop-filter backdrop-blur-lg border border-gray-700 p-8 rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-500 hover:scale-[1.02] animate-fade-in">
-        <h1 className="text-3xl md:text-4xl font-extrabold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-500 drop-shadow-lg leading-tight">
-          Log in to Existing MultiSig Wallet
-        </h1>
-        <p className="text-base md:text-lg text-gray-300 mb-8 text-center leading-relaxed">
-          Enter the contract address of an existing MultiSig Wallet to access
-          its dashboard and manage your assets.
-        </p>
-        <div className="mb-6">
-          <label
-            htmlFor="contractAddress"
-            className="block text-gray-300 text-sm font-bold mb-2 text-left"
+      <div className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-8 animate-fade-in relative z-10">
+        <div className="flex justify-center mb-6">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-20 w-20 text-indigo-400 drop-shadow-lg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={1.5}
           >
-            Contract Address:
-          </label>
-          <input
-            type="text"
-            id="contractAddress"
-            value={contractAddress}
-            onChange={(e) => setContractAddress(e.target.value)}
-            placeholder="e.g., 0xAbc123..."
-            className="shadow-inner appearance-none border border-gray-600 rounded-lg w-full py-3 px-4 text-gray-200 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-700 placeholder-gray-400 transition duration-300"
-          />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 2.25c-4.97 0-9 3.6-9 8.04 0 4.44 3.73 8.2 8.62 11.38.21.13.47.13.68 0C17.27 18.49 21 14.73 21 10.29c0-4.44-4.03-8.04-9-8.04zm0 10.54a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
+            />
+          </svg>
         </div>
+
+        <h1 className="text-2xl md:text-3xl font-bold text-center bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent mb-3">
+          Access Your MultiSig Wallet
+        </h1>
+        <p className="text-gray-300 text-center text-sm mb-6">
+          Securely connect to your existing wallet by entering its contract
+          address below.
+        </p>
+
+        <label
+          htmlFor="contractAddress"
+          className="block text-sm text-gray-400 mb-2 font-medium"
+        >
+          Contract Address
+        </label>
+        <input
+          type="text"
+          id="contractAddress"
+          value={contractAddress}
+          onChange={(e) => setContractAddress(e.target.value)}
+          placeholder="0xAbc123..."
+          className="w-full px-4 py-3 rounded-xl bg-gray-900/60 border border-gray-700 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+        />
+
         <button
           onClick={handleLoadWallet}
           disabled={loading}
-          className={`w-full py-3 px-4 rounded-lg font-bold text-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-70 shadow-lg tracking-wide uppercase ${
+          className={`w-full mt-6 py-3 rounded-xl font-semibold text-white shadow-lg transition transform hover:scale-105 focus:outline-none focus:ring-4 ${
             loading
-              ? "bg-gray-600 cursor-not-allowed text-gray-400"
-              : "bg-gradient-to-r from-indigo-600 to-blue-700 hover:from-indigo-700 hover:to-blue-800 text-white"
+              ? "bg-gray-700 cursor-not-allowed text-gray-400"
+              : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:ring-indigo-500"
           }`}
         >
-          {loading ? "Loading Wallet..." : "Load Wallet"}
+          {loading ? "Loading..." : "Load Wallet"}
         </button>
+
         {message && (
-          <p
-            className={`mt-4 text-center text-sm md:text-base p-2 rounded-md ${
-              message.startsWith("Error")
-                ? "bg-red-900 text-red-300"
-                : "bg-green-900 text-green-300"
+          <div
+            className={`mt-4 text-center text-sm p-3 rounded-lg font-medium ${
+              message.startsWith("Error") ||
+              message.startsWith("❌") ||
+              message.startsWith("⚠️")
+                ? "bg-red-900/50 text-red-300 border border-red-700"
+                : "bg-green-900/50 text-green-300 border border-green-700"
             }`}
           >
             {message}
-          </p>
+          </div>
         )}
       </div>
 
       <style jsx>{`
-        @keyframes blob {
-          0% {
-            transform: translate(0, 0) scale(1);
-          }
-          33% {
-            transform: translate(30px, -50px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
-          100% {
-            transform: translate(0, 0) scale(1);
-          }
-        }
-
-        @keyframes blob-alt {
-          0% {
-            transform: translate(0, 0) scale(1);
-          }
-          33% {
-            transform: translate(-40px, 60px) scale(1.2);
-          }
-          66% {
-            transform: translate(30px, -30px) scale(0.8);
-          }
-          100% {
-            transform: translate(0, 0) scale(1);
-          }
-        }
-
         @keyframes fadeIn {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(15px);
           }
           to {
             opacity: 1;
             transform: translateY(0);
           }
         }
-
-        .animate-blob {
-          animation: blob 7s infinite cubic-bezier(0.42, 0, 0.58, 1);
-        }
-
-        .animate-blob-alt {
-          animation: blob-alt 8s infinite cubic-bezier(0.42, 0, 0.58, 1);
-        }
-
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-
         .animate-fade-in {
           animation: fadeIn 0.8s ease-out forwards;
         }
