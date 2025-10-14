@@ -2,7 +2,7 @@
 
 # 🚀 Live Demo
 
-### Experience the MultiSig Wallet DApp live: https://multisig-wallet-3stt.vercel.app/
+### Experience the MultiSig Wallet DApp live: https://multisig-wallet-theta.vercel.app/
 
 A robust and secure Decentralized Application (DApp) for managing digital assets with enhanced security through multi-signature requirements. This repository provides a complete full-stack solution, encompassing both the **Solidity smart contract** and a **React-based frontend user interface**.
 
